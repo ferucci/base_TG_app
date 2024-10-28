@@ -1,1 +1,1 @@
-# Lizzard Clicker!
+# Telegramm App Clicker!
