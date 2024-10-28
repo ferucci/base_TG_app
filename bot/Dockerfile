@@ -5,4 +5,4 @@ RUN npm ci
 COPY . .
 ENV PORT=3007
 EXPOSE $PORT
-CMD ["npm", 'start']
+ENTRYPOINT ["npm", "start"]
