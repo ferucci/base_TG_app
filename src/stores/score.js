@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-
+import { debounceUpdateScore } from '@/helpers'
 export const baseLevelScore = 10
 
 // Создаю массив, который показывает сколько очков нужно для следующего уровня
-const levels = new Array(10).fill(0).map((_, i) => {
+const levels = new Array(20).fill(0).map((_, i) => {
   return baseLevelScore * Math.pow(2, i)
 })
 
@@ -51,10 +51,11 @@ export const useScoreStore = defineStore('score', {
     add(score = 1) {
       // изменяю state
       this.score += score
+      debounceUpdateScore(this.score)
     },
     // Для получения данных из бд
     setScore(score) {
       this.score = score
-    }
-  }
+    },
+  },
 })
