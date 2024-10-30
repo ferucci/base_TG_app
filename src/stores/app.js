@@ -19,7 +19,7 @@ export const useAppStore = defineStore('app', {
 
       score.setScore(this.user.score)
 
-      if (refId && +refId !== +this.user.telegram) {
+      if (refId && +refId !== +this.user.telegram_id) {
         await registerRef(user?.first_name ?? 'заглушка', refId)
       }
     },

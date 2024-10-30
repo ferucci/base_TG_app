@@ -15,3 +15,4 @@
 Подключена библиотека для получения функционала tg:
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+

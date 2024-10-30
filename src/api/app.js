@@ -17,20 +17,20 @@ export async function fetchTasks() {
 
 // Проверяю наличие пользователя
 export async function getOrCreateUser(refId) {
-  const user = await supabase
+  const foundUser = await supabase
     .from('users')
     .select()
-    .eq('telegram', MY_ID)
+    .eq('telegram_id', MY_ID)
 
-  if (user.data.length !== 0) {
-    return user.data[0]
+  if (foundUser.data.length !== 0) {
+    return foundUser.data[0]
   }
-
   const newUser = {
-    telegram: MY_ID,
+    telegram_id: MY_ID,
     friends: {},
     tasks: {},
-    score: 0
+    score: 0,
+    ref_id: refId ? refId.trim() : ""
   }
 
   await supabase.from('users').insert(newUser)
@@ -38,12 +38,12 @@ export async function getOrCreateUser(refId) {
 }
 
 export async function updateScore(score) {
-  return await supabase.from('users').update({ score }).eq('telegram', MY_ID)
+  return await supabase.from('users').update({ score }).eq('telegram_id', MY_ID)
 }
 
 export async function registerRef(userName, refId) {
   // Получаю все данные, которые есть у реферала
-  const { data } = await supabase.from('users').select().eq('telegram', +refId)
+  const { data } = await supabase.from('users').select().eq('telegram_id', +refId)
   // Получаю самого пользователя
   const refUser = data[0]
   // Заношу "себя" в таблицу к рефералу
@@ -52,7 +52,7 @@ export async function registerRef(userName, refId) {
     .update({
       friends: { ...refUser.friends, [MY_ID]: userName },
       score: refUser.score + 100
-    }).eq('telegram', +refId)
+    }).eq('telegram_id', +refId)
 
 }
 
@@ -66,7 +66,7 @@ export async function completeTask(user, task) {
     .update({
       tasks: { ...user?.tasks, [task.id]: true },
       score: newScore,
-    }).eq('telegram', MY_ID)
+    }).eq('telegram_id', MY_ID)
 
   try {
     return updateUser;
